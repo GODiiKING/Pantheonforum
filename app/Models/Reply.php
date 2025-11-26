@@ -10,7 +10,7 @@ class Reply extends Model
     use HasFactory;
 
     protected $fillable = [
-        'post_id',
+        'thread_id',
         'user_id',
         'body', // matches migration
     ];
@@ -20,8 +20,8 @@ class Reply extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function post()
+    public function thread()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Thread::class);
     }
 }

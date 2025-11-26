@@ -28,8 +28,26 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <!-- Flash Messages -->
+                @if (session('success'))
+                    <div class="mb-4 p-4 rounded bg-green-100 text-green-800">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-4 p-4 rounded bg-red-100 text-red-800">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                {{-- This is where child views inject their content --}}
+                @yield('content')
             </main>
         </div>
     </body>

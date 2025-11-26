@@ -4,27 +4,27 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Helpers\ApiResponse;
-use App\Models\Post;
+use App\Models\Thread;
 use App\Models\Reply;
 use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {
-    public function index(Post $post)
+    public function index(Thread $thread)
     {
-        $replies = $post->replies()->with('user')->latest()->get();
+        $replies = $thread->replies()->with('user')->latest()->get();
         return ApiResponse::success($replies);
     }
 
-    public function store(Request $request, Post $post)
+    public function store(Request $request, Thread $thread)
     {
         $validated = $request->validate([
-            'content' => 'required|string',
+            'body' => 'required|string',
         ]);
 
-        $reply = $post->replies()->create([
+        $reply = $thread->replies()->create([
             'user_id' => $request->user()->id,
-            'content' => $validated['content'],
+            'body' => $validated['body'],
         ]);
 
         return ApiResponse::success($reply->load('user'), 201);
@@ -35,7 +35,7 @@ class ReplyController extends Controller
         $this->authorize('update', $reply);
 
         $validated = $request->validate([
-            'content' => 'required|string',
+            'body' => 'required|string',
         ]);
 
         $reply->update($validated);

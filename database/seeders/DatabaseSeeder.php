@@ -3,13 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
@@ -18,10 +16,16 @@ class DatabaseSeeder extends Seeder
         // Call the RoleSeeder so roles are created
         $this->call(RoleSeeder::class);
 
-        // Optionally still create a test user
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create the test user first (with password)
+        $user = User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password'), // ✅ add a hashed password
+            ]
+        );
+
+        // Call the TopicSeeder and pass the user ID
+        $this->callWith(TopicSeeder::class, ['userId' => $user->id]);
     }
 }

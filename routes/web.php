@@ -4,13 +4,20 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThreadController; // <-- add this line
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\TopicController;
+
+
+// Topics routes
+Route::get('/topics', [TopicController::class, 'index'])->name('topics.index');
+Route::get('/topics/{topic}', [TopicController::class, 'show'])->name('topics.show');
+
 
 Route::post('/threads/{thread}/replies', [ReplyController::class, 'store'])
     ->middleware('auth')
     ->name('replies.store');
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
